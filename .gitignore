@@ -34,7 +34,7 @@ htmlcov/
 Thumbs.db
 
 # Project specific
-.scratchpad/
+# .scratchpad/
 logs/
 output/
 *.pkl
