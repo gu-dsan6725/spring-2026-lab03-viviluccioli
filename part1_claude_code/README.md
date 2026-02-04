@@ -124,6 +124,7 @@ sklearn. Put scripts in part1_claude_code/src/ and output in output/.
 The more detail you provide, the better the plan will be. Try adding specifics like the metrics you want, the number of CV folds, or the derived features you have in mind.
 
 **What to Watch For:**
+
 - Claude uses a **subagent** (Task tool with Explore type) to investigate the existing codebase before planning
 - The plan is written to `.scratchpad/<feature-name>/plan.md`
 - Claude stops and asks you to **review before building** -- it will not start coding yet
@@ -147,6 +148,7 @@ with implementation.
 ```
 
 **What to Watch For:**
+
 - Claude updates the plan file in `.scratchpad/`
 - After you approve, Claude begins writing code
 
@@ -156,17 +158,17 @@ Sit back and observe. Claude will create multiple Python files. Do not interrupt
 
 **What to Watch For:**
 
-| What Happens | Claude Code Feature | How You Can Tell |
-|---|---|---|
-| Claude writes a `.py` file | Write tool | You see the file content appear |
-| Ruff auto-formats the file | PostToolUse command hook | You see "Running ruff and py_compile..." status message |
-| py_compile verifies syntax | PostToolUse command hook | Same status message; no error means success |
-| Claude checks if tests exist | PostToolUse prompt hook | Claude considers creating a test file after each write |
-| Code uses `polars` not `pandas` | CLAUDE.md enforcement | Check the import statements |
-| Logging uses the prescribed format | CLAUDE.md enforcement | Check the `logging.basicConfig()` call in each file |
-| Private functions start with `_` | CLAUDE.md enforcement | Check function names in the code |
-| Constants at top of file | CLAUDE.md enforcement | Look at the top of each file, not inside functions |
-| Claude decomposes into subtasks | Subagents (Task tool) | You may see task spawning in the output |
+| What Happens                       | Claude Code Feature      | How You Can Tell                                        |
+| ---------------------------------- | ------------------------ | ------------------------------------------------------- |
+| Claude writes a `.py` file         | Write tool               | You see the file content appear                         |
+| Ruff auto-formats the file         | PostToolUse command hook | You see "Running ruff and py_compile..." status message |
+| py_compile verifies syntax         | PostToolUse command hook | Same status message; no error means success             |
+| Claude checks if tests exist       | PostToolUse prompt hook  | Claude considers creating a test file after each write  |
+| Code uses `polars` not `pandas`    | CLAUDE.md enforcement    | Check the import statements                             |
+| Logging uses the prescribed format | CLAUDE.md enforcement    | Check the `logging.basicConfig()` call in each file     |
+| Private functions start with `_`   | CLAUDE.md enforcement    | Check function names in the code                        |
+| Constants at top of file           | CLAUDE.md enforcement    | Look at the top of each file, not inside functions      |
+| Claude decomposes into subtasks    | Subagents (Task tool)    | You may see task spawning in the output                 |
 
 ### Step 5: Run the Pipeline
 
@@ -181,6 +183,7 @@ uv run python part1_claude_code/src/03_xgboost_model.py
 Verify that the `output/` directory contains distribution plots, correlation matrix, parquet files, model file, confusion matrix, feature importance chart, and evaluation report.
 
 **What to Watch For:**
+
 - The logging output uses the exact format from CLAUDE.md
 - Elapsed time is reported at the end of each script
 
@@ -205,6 +208,7 @@ Then:
 ```
 
 **What to Watch For:**
+
 - Each skill loads its instructions from `.claude/skills/<name>/SKILL.md`
 - Claude follows the skill steps (compare against the SKILL.md you read in Step 1)
 - The `/generate-report` skill uses the template from `templates/report_template.md`
@@ -220,6 +224,7 @@ that prints "hello world" without using logging and without type annotations.
 ```
 
 **What to Watch For:**
+
 - The PostToolUse hook runs ruff and py_compile immediately after the file is written
 - The prompt hook may flag the missing test file
 - If Claude follows CLAUDE.md, it will likely add logging and type annotations despite your instruction -- this shows CLAUDE.md influence
@@ -234,6 +239,7 @@ Run git push --force origin main
 ```
 
 **What to Watch For:**
+
 - The PreToolUse hook blocks the command **before** it executes
 - Claude reports that force push is blocked by project hooks
 
@@ -265,12 +271,12 @@ The `demo/` folder contains reference implementations and the original granular 
 
 You can compare your Claude-generated code against `demo/solved/` to see how implementations differ.
 
-| File | Description |
-|------|-------------|
-| `demo/solved/01_eda.py` | Loads California Housing, computes statistics with polars, generates distribution and correlation plots |
-| `demo/solved/02_feature_engineering.py` | Creates derived features, handles infinite values, scales features, splits into train/test |
-| `demo/solved/03_xgboost_model.py` | Trains XGBoost regressor with CV and hyperparameter tuning, computes metrics (RMSE, MAE, R2) |
-| `demo/solved/04_generate_report.py` | Generates a comprehensive markdown report from model artifacts |
+| File                                    | Description                                                                                             |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `demo/solved/01_eda.py`                 | Loads California Housing, computes statistics with polars, generates distribution and correlation plots |
+| `demo/solved/02_feature_engineering.py` | Creates derived features, handles infinite values, scales features, splits into train/test              |
+| `demo/solved/03_xgboost_model.py`       | Trains XGBoost regressor with CV and hyperparameter tuning, computes metrics (RMSE, MAE, R2)            |
+| `demo/solved/04_generate_report.py`     | Generates a comprehensive markdown report from model artifacts                                          |
 
 ## Troubleshooting
 
