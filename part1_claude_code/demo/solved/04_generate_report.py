@@ -42,9 +42,7 @@ def _find_model_file(
             logger.info(f"Found model file: {files[0]}")
             return files[0]
 
-    raise FileNotFoundError(
-        f"No .joblib or .pkl model file found in {output_dir}"
-    )
+    raise FileNotFoundError(f"No .joblib or .pkl model file found in {output_dir}")
 
 
 def _load_existing_metrics(
@@ -85,11 +83,20 @@ def _extract_model_info(
 
     params = model.get_params()
     key_params = {
-        k: v for k, v in params.items()
-        if v is not None and k in [
-            "n_estimators", "max_depth", "learning_rate",
-            "objective", "random_state", "subsample",
-            "colsample_bytree", "reg_alpha", "reg_lambda",
+        k: v
+        for k, v in params.items()
+        if v is not None
+        and k
+        in [
+            "n_estimators",
+            "max_depth",
+            "learning_rate",
+            "objective",
+            "random_state",
+            "subsample",
+            "colsample_bytree",
+            "reg_alpha",
+            "reg_lambda",
             "min_child_weight",
         ]
     }
@@ -131,9 +138,7 @@ def _compute_metrics(
     rmse = float(np.sqrt(mean_squared_error(y_arr, preds)))
     mae = float(mean_absolute_error(y_arr, preds))
     r2 = float(r2_score(y_arr, preds))
-    mape = float(
-        np.mean(np.abs(errors / np.where(y_arr == 0, 1, y_arr))) * 100
-    )
+    mape = float(np.mean(np.abs(errors / np.where(y_arr == 0, 1, y_arr))) * 100)
 
     metrics = {
         "RMSE": round(rmse, 4),
@@ -259,9 +264,7 @@ def _build_report(
     lines.append("| Rank | Feature | Importance Score |")
     lines.append("|------|---------|-----------------:|")
     for feat in top_features:
-        lines.append(
-            f"| {feat['rank']} | {feat['name']} | {feat['score']} |"
-        )
+        lines.append(f"| {feat['rank']} | {feat['name']} | {feat['score']} |")
     lines.append("")
 
     # Recommendations
